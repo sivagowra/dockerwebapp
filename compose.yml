@@ -1,14 +1,22 @@
 ---
-version: "3"
+# Build: docker compose build --no-cache
+# Run:   docker compose up -d
+# Remove old images: docker image prune -f
 services:
- devopsdb:
-   image: shaikmustafa/harikanew:dbimage
-   ports:
-     - "3306:3306"
+  devopsdb:
+    image: dockerwebapp-devopsdb:latest
+    build:
+      context: ./Docker-db
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
 
- application:
-   image: shaikmustafa/harikanew:appimage
-   ports:
-     - "1111:8080"
-   depends_on:
-     - "devopsdb"
+  application:
+    image: dockerwebapp-application:latest
+    build:
+      context: .
+      dockerfile: Docker-app/Dockerfile
+    ports:
+      - "1111:8080"
+    depends_on:
+      - devopsdb
